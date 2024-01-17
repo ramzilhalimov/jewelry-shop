@@ -1,5 +1,8 @@
-export function renderHeaderComponent({ element }) {
-  element.innerHTML = `
+import { goToPage } from "..";
+import { PRODUCTS_PAGE } from "../routes";
+
+export function renderHeaderComponent({ appEl }) {
+  const appHtml = `
   <body>
   <header class="header center">
       <div class="header__content">
@@ -18,7 +21,7 @@ export function renderHeaderComponent({ element }) {
       </nav>
       </div>
       <h1 class="header__heading">Долго, дорого, богато!</h1>
-      <button class="header__button">Перейти в каталог</button>
+      <button id="catalogButton" class="header__button">Перейти в каталог</button>
       <img class="header__brands" src="/assets/images/first-screen__brands.png" alt="brands"></img>
   </header>
   <div class="for center"
@@ -135,6 +138,8 @@ export function renderHeaderComponent({ element }) {
 </body>
   
 `;
-
-  return element;
+  appEl.innerHTML = appHtml;
+  document.querySelector(".header__button").addEventListener("click", () => {
+    goToPage(PRODUCTS_PAGE);
+  });
 }

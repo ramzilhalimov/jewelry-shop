@@ -1,6 +1,6 @@
-import { USER_POSTS_PAGE, LOADING_PAGE, POSTS_PAGE } from "../routes.js";
+import { USER_PRODUCTS_PAGE, LOADING_PAGE, PRODUCTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage, getToken, formateDate } from "../index.js";
+import { posts, goToPage } from "../index.js";
 
 export function renderUserPostsPageComponent({ appEl }) {
   const appHtml = `
@@ -52,7 +52,7 @@ export function renderUserPostsPageComponent({ appEl }) {
   ${post.description}
 </p>
 <p class="post-date">
-  ${formateDate(post.createdAt)}
+ 
 </p>
 </li>
 `;
@@ -65,7 +65,7 @@ export function renderUserPostsPageComponent({ appEl }) {
 
   for (let userEl of document.querySelectorAll(".post-header")) {
     userEl.addEventListener("click", () => {
-      goToPage(USER_POSTS_PAGE, {
+      goToPage(USER_PRODUCTS_PAGE, {
         userId: userEl.dataset.userId,
       });
     });
@@ -79,25 +79,23 @@ export function renderUserPostsPageComponent({ appEl }) {
         goToPage(LOADING_PAGE);
         dislikeApi({
           postId: postId,
-          token: getToken(),
         })
           .then(() => {
-            goToPage(POSTS_PAGE);
+            goToPage(PRODUCTS_PAGE);
           })
           .catch(() => {
-            goToPage(POSTS_PAGE);
+            goToPage(PRODUCTS_PAGE);
           });
       } else {
         goToPage(LOADING_PAGE);
         likeApi({
           postId: postId,
-          token: getToken(),
         })
           .then(() => {
-            goToPage(POSTS_PAGE);
+            goToPage(PRODUCTS_PAGE);
           })
           .catch(() => {
-            goToPage(POSTS_PAGE);
+            goToPage(PRODUCTS_PAGE);
           });
       }
     });

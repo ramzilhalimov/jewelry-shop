@@ -1,80 +1,37 @@
 import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import {
+  MAIN_PAGE,
   ADD_POSTS_PAGE,
   AUTH_PAGE,
   LOADING_PAGE,
-  POSTS_PAGE,
-  USER_POSTS_PAGE,
+  PRODUCTS_PAGE,
+  USER_PRODUCTS_PAGE,
 } from "./routes.js";
-import { renderPostsPageComponent } from "./components/posts-page-component.js";
+import { renderProductsPageComponent } from "./components/products-page-component.js";
 import { renderLoadingPageComponent } from "./components/loading-page-component.js";
-import {
-  getUserFromLocalStorage,
-  removeUserFromLocalStorage,
-  saveUserToLocalStorage,
-} from "./helpers.js";
+import { getUserFromLocalStorage } from "./helpers.js";
 import { renderUserPostsPageComponent } from "./components/user-posts-page-component.js";
+import { renderHeaderComponent } from "./components/header-component.js";
 
 export let user = getUserFromLocalStorage();
 export let page = null;
 export let posts = [];
 
-export const changeLocalPosts = (newPosts) => {
-  posts = newPosts;
-};
-
-export const getToken = () => {
-  const token = user ? `Bearer ${user.token}` : undefined;
-  return token;
-};
-
-export const logout = () => {
-  user = null;
-  removeUserFromLocalStorage();
-  goToPage(POSTS_PAGE);
-};
-
-export const formateDate = (date) => {
-  return formatDistanceToNow(new Date(date), { addSuffix: true, locale: ru });
-};
-
-export const goToPage = (newPage, data) => {
+export const goToPage = (newPage) => {
   if (
     [
-      POSTS_PAGE,
+      MAIN_PAGE,
+      PRODUCTS_PAGE,
       AUTH_PAGE,
       ADD_POSTS_PAGE,
-      USER_POSTS_PAGE,
+      USER_PRODUCTS_PAGE,
       LOADING_PAGE,
     ].includes(newPage)
   ) {
-    if (newPage === ADD_POSTS_PAGE) {
-      // Если пользователь не авторизован, то отправляем его на авторизацию перед добавлением поста
-      page = user ? ADD_POSTS_PAGE : AUTH_PAGE;
-      return renderApp();
+    if (newPage === MAIN_PAGE) {
     }
-
-    if (newPage === POSTS_PAGE) {
-      page = LOADING_PAGE;
-      renderApp();
-    }
-
-    if (newPage === USER_POSTS_PAGE) {
-      page = LOADING_PAGE;
-      renderApp();
-      return getUserPosts({
-        userId: data.userId,
-        token: getToken(),
-      }).then((newPosts) => {
-        page = USER_POSTS_PAGE;
-        posts = newPosts;
-        return renderApp();
-      });
-    }
-
     page = newPage;
     renderApp();
-
     return;
   }
 
@@ -91,19 +48,6 @@ const renderApp = () => {
     });
   }
 
-  if (page === AUTH_PAGE) {
-    return renderAuthPageComponent({
-      appEl,
-      setUser: (newUser) => {
-        user = newUser;
-        saveUserToLocalStorage(user);
-        goToPage(POSTS_PAGE);
-      },
-      user,
-      goToPage,
-    });
-  }
-
   if (page === ADD_POSTS_PAGE) {
     return renderAddPostPageComponent({
       appEl,
@@ -111,10 +55,9 @@ const renderApp = () => {
         addPosts({
           description: description,
           imageUrl: imageUrl,
-          token: getToken(),
         })
           .then(() => {
-            goToPage(POSTS_PAGE);
+            goToPage(PRODUCTS_PAGE);
           })
           .catch(() => {
             document
@@ -124,18 +67,22 @@ const renderApp = () => {
       },
     });
   }
-
-  if (page === POSTS_PAGE) {
-    return renderPostsPageComponent({
+  if (page === MAIN_PAGE) {
+    return renderHeaderComponent({
+      appEl,
+    });
+  }
+  if (page === PRODUCTS_PAGE) {
+    return renderProductsPageComponent({
       appEl,
     });
   }
 
-  if (page === USER_POSTS_PAGE) {
+  if (page === USER_PRODUCTS_PAGE) {
     return renderUserPostsPageComponent({
       appEl,
     });
   }
 };
 
-goToPage(POSTS_PAGE);
+goToPage(MAIN_PAGE);
