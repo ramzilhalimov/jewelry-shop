@@ -1,10 +1,11 @@
-import { USER_PRODUCTS_PAGE } from "../routes.js";
+import { LOADING_PAGE, MAIN_PAGE, PRODUCTS_PAGE } from "../routes.js";
+import { renderHeaderComponent } from "./header-component.js";
 import { goToPage } from "../index.js";
 import { productsData } from "../ products.js";
 
-export function renderProductsPageComponent({ appEl }) {
+export function renderUserProductsPageComponent({ appEl }) {
   const productsHtml = productsData
-    .slice(0, 6)
+    .slice(0, 3)
     .map(
       (product) =>
         '<div class="product">' +
@@ -38,56 +39,43 @@ export function renderProductsPageComponent({ appEl }) {
       </nav>
       </div>
   </header>
-  <nav class="filter__list listbar">
-  <div class="dropdown">
-    <button class="listbar__link">Бренд</button>
-    <span class="dropdown-icon">v</span>
-    <div class="dropdown-content">
-      <!--  варианты -->
-    </div>
+  <nav class="bread__list center listbar ">
+  <button class="listbar__link">Главная  /</button>
+  <button class="listbar__catalog">Каталог  /</button>
+  <a href="#"  class="listbar__link">Категория  /</a>
+  <a href="#"  class="listbar__link">Подвеска Dolce & Gabarra</a>
+  </nav>
+  <div class="main-container center">
+  <div class="photo-container">
+      <img src="/assets/images/Apple_iPhone_12_vs_Apple_iPad_Mini_6_21518.jpg"  alt="Главное фото">
+      <div class="sub-photos">
+          <img src="/assets/images/Apple_iPhone_12_vs_Apple_iPad_Mini_6_21518.jpg" alt="Фото 1">
+          <img src="/assets/images/Apple_iPhone_12_vs_Apple_iPad_Mini_6_21518.jpg" alt="Фото 2">
+          <img src="/assets/images/Apple_iPhone_12_vs_Apple_iPad_Mini_6_21518.jpg" alt="Фото 3">
+      </div>
   </div>
-  <div class="dropdown">
-    <button class="listbar__link">Цена</button>
-    <span class="dropdown-icon">v</span>
-    <div class="dropdown-content">
-      <!--  варианты -->
-    </div>
+  <div class="details-container">
+  <div class="details-content">
+      <h1>Подвеска Dolce & Gabbara</h1>
+      <nav class="details__list  detailsbar ">
+      <a href="#"  class="detailsbar__link">Категория: </a>
+      <a href="#"  class="detailsbar__link">Подвески  </a>
+      <a href="#"  class="detailsbar__link">Бренд:  </a>
+      <a href="#"  class="detailsbar__link">Dolce & Gabarra</a>
+      </nav>
+      <p class ="details-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Blandit mattis scelerisque odio nunc. Ipsum quis facilisis turpis vulputate. Viverra dignissim in nec phasellus. Tincidunt est ipsum diam, vestibulum dignissim dui diam. Et nulla sit convallis orci est, fames sit luctus lacus. Nunc donec malesuada amet eget eget pharetra. Ultricies et, ac varius at amet viverra feugiat non massa.
+      Vel vel in urna, sodales urna ac sed felis. Tellus augue et senectus malesuada faucibus sollicitudin ornare. Sit non et sit enim in ornare velit. Ac imperdiet vitae, orci, nec scelerisque enim sit enim risus. 
+      Et nulla sit convallis orci est, fames sit luctus lacus. 
+      </p>
+      <p class="price">200 000 ₽ </p>
+      <div class = "details-button">  
+      <button class="buy-button">Купить</button>
+      <button class="add-to-cart-button">Добавить в корзину</button>
+      </div>
   </div>
-  <div class="dropdown">
-  <button class="listbar__link">Для кого</button>
-  <span class="dropdown-icon">v</span>
-  <div class="dropdown-content">
-    <!--  варианты -->
   </div>
 </div>
-<div class="dropdown">
-<button class="listbar__link">Коллекция</button>
-<span class="dropdown-icon">v</span>
-<div class="dropdown-content">
-  <!--  варианты -->
-</div>
-</div>
-<div class="dropdown">
-<button class="listbar__link">Сезон</button>
-<span class="dropdown-icon">v</span>
-<div class="dropdown-content">
-  <!--  варианты -->
-</div>
-</div>
-<div class="dropdown">
-<button class="listbar__link">Событие</button>
-<span class="dropdown-icon">v</span>
-<div class="dropdown-content">
-  <!--  варианты -->
-</div>
-</div>
-</nav>
-  <div class="products center">
-  ${productsHtml}
-   </div>
-   <div class = "products__content">
-   <button class="products-btn">Покажите еще</button>
-   </div>
+
    <div class= "section-product center">
    <div class="section-product__content">
    <div class="section-product__nav">
@@ -131,6 +119,15 @@ export function renderProductsPageComponent({ appEl }) {
 </div>
   </div>
  </div>
+ <section class="product-box center">
+<div class="product-box__title">Мы подготовили для вас кое-что еще</div>
+<h2 class="product-box__heading">Товары, которые могут Вам понравиться</h2>
+<div class="products center">
+${productsHtml}
+ </div>
+  </div>
+</div>
+</section>
 <div class="subscribe center">
 <div class="subscribe__title">Полезные советы и персональный предложения</div>
 <h2 class="subscribe__heading">Эксклюзивная рассылка</h2>
@@ -196,30 +193,20 @@ export function renderProductsPageComponent({ appEl }) {
   <a href="#" class="footerbar__link">Сделано Figma.info</a>
   </div>
   </nav>
-</body>
-`;
+</body>`;
 
   appEl.innerHTML = appHtml;
-  //Переход на страницу товара
-  document.querySelector(".products").innerHTML = productsHtml;
-  document.querySelector(".products").addEventListener("click", () => {
-    goToPage(USER_PRODUCTS_PAGE);
+  //Переход на главную
+  document.querySelector(".listbar__link").addEventListener("click", () => {
+    goToPage(MAIN_PAGE);
   });
+  //Переход в каталог
+  document.querySelector(".listbar__catalog").addEventListener("click", () => {
+    goToPage(PRODUCTS_PAGE);
+  });
+  const button = document.querySelector(".subscribebar__btn");
+  button.addEventListener("click", sendDataToServer);
 
-  // Функция для отображения товаров
-  const productsElements = document.querySelectorAll(".product");
-  for (let i = 6; i < productsElements.length; i++) {
-    productsElements[i].style.display = "none";
-  }
-  const moreButton = document.querySelector(".products-more-btn");
-  if (moreButton) {
-    moreButton.addEventListener("click", function () {
-      for (let i = 6; i < productsElements.length; i++) {
-        productsElements[i].style.display = "flex";
-      }
-      this.style.display = "none";
-    });
-  }
   // Функция для отображения полного текста
   const readMoreButton = document.querySelector(".read-more-btn");
   const productText = document.querySelector(".section-product__text");
@@ -236,17 +223,43 @@ export function renderProductsPageComponent({ appEl }) {
     console.error("Не удалось найти один из элементов");
   }
 
-  // Функция для отображения списка
-  document.querySelectorAll(".dropdown").forEach(function (dropdown) {
-    var button = dropdown.querySelector(".listbar__link");
-    var icon = dropdown.querySelector(".dropdown-icon");
+  // Функция для отправки данных на сервер
+  function sendDataToServer() {
+    // Получаем значение поля email
+    const email = document.querySelector(".subscribebar__email").value;
 
-    button.addEventListener("click", function () {
-      this.nextElementSibling.classList.toggle("show");
-    });
+    // объект, который будет содержать данные для отправки на сервер
+    const data = { email: email };
 
-    icon.addEventListener("click", function () {
-      this.previousElementSibling.nextElementSibling.classList.toggle("show");
-    });
-  });
+    const url = "здесь_адрес_запроса";
+
+    // параметры запроса
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+
+    //  запрос на сервер
+    fetch(url, options)
+      .then((response) => {
+        if (response.ok) {
+          return response.json(); // если запрос прошел успешно, возвращаем JSON
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((data) => {
+        // Обрабатываем ответ от сервера
+        console.log(data);
+      })
+      .catch((error) => {
+        // Обрабатываем ошибки
+        console.error(
+          "There has been a problem with your fetch operation:",
+          error
+        );
+      });
+  }
 }

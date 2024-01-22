@@ -1,4 +1,3 @@
-
 @font-face {
   font-family: "StratosSkyeng";
   font-style: normal;
@@ -32,10 +31,6 @@ body {
 /* скрывает скролбары в chrome */
 body::-webkit-scrollbar {
   display: none;
-}
-
-p {
-  margin: 0;
 }
 
 .button,

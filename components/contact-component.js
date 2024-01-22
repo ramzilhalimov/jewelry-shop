@@ -1,13 +1,10 @@
-import { renderHeaderComponent } from "./header-component.js";
-import { renderUploadImageComponent } from "./upload-image-component.js";
+import { goToPage } from "../index.js";
+import { MAIN_PAGE } from "../routes";
 
-let imageUrl = "";
-
-export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
-  const render = () => {
-    const appHtml = `
-    <body>
-  <header class="header center">
+export function renderContactComponent({ appEl }) {
+  const appHtml = `
+  <body>
+  <header class="header-product center">
       <div class="header__content">
       <nav class="header__nav navbar">
       <a href="#" class="navbar__link">Контрагентам</a>
@@ -24,25 +21,40 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
       </nav>
       </div>
   </header>
-<div class="subscribe center">
-<div class="subscribe__title">Полезные советы и персональный предложения</div>
-<h2 class="subscribe__heading">Эксклюзивная рассылка</h2>
-<div class="subscribe__content">
-        <div class="subscribe__info">
-            <nav class="subscribe__item">
-                <a href="#" class="subscribe__link"><img class="subscribe__logo" src="/assets/images/subscribe__icon.svg" alt="logo">Личный менеджер</a>
-                <a href="#" class="subscribe__link"><img class="subscribe__logo" src="/assets/images/subscribe__icon.svg" alt="logo">Доставка и оформление</a>
-                <a href="#" class="subscribe__link"><img class="subscribe__logo" src="/assets/images/subscribe__icon.svg" alt="logo">Индивидуальный дизайн</a>
-            </nav>
-        </div>
-        <form action="#" class="subscribe__form subscribebar">
-        <div class="subscribebar__item">
-        <input placeholder=" Ваш Email  " class="subscribebar__email" type="email" >
-        <button class="subscribebar__btn">Подписаться</button>
-    </div>
-    </form>
-    </div>
-    </div>
+  <nav class="bread__list center listbar ">
+  <button class="listbar__link">Главная  /</button>
+  <a href="#"  class="listbar__link">Контакты  </a>
+  </nav>
+  <section class="section-contact center">
+  <div class="section-contact__content">
+          <div class="section-contact__info">
+          <h1 class ="section-contact-name">Контакты</div>
+              <div class="section-contact__item">
+                  <h4 class="section-contact__heading">Главный офис</h4>
+                  <a href="#" class="section-contact__link"><img class="subscribe__logo" src="/assets/images/gridicons_location.svg" alt="logo">Невский 140, офис 1-5</a>
+                  <a href="#" class="section-contact__link"><img class="subscribe__logo" src="/assets/images/gridicons_location.svg" alt="logo">Невский 140, офис 1-5</a>
+              </div>
+              <div class="section-contact__item">
+              <h4 class="section-contact__heading">Телефоны</h4>
+              <a href="#" class="section-contact__link"><img class="subscribe__logo" src="/assets/images/carbon_phone-filled.svg" alt="logo">8 (812) 458-56-45</a>
+              <a href="#" class="section-contact__link"><img class="subscribe__logo" src="/assets/images/carbon_phone-filled.svg" alt="logo"8-911-878-00-00</a>
+          </div>
+              <div class="section-contact__item">
+                  <h4 class="section-contact__heading">E-mail</h4> 
+                  <a href="#" class="section-contact__link"><img class="subscribe__logo" src="/assets/images/entypo_mail.svg" alt="logo">office@ojjo.com</a>
+                  <a href="#" class="section-contact__link"><img class="subscribe__logo" src="/assets/images/entypo_mail.svg" alt="logo">sales@ojjo.com</a>
+              </div>
+              <div class="section-contact__item">
+              <h4 class="section-contact__heading">Доп. адреса</h4> 
+              <a href="#" class="section-contact__link"><img class="subscribe__logo" src="/assets/images/gridicons_location.svg" alt="logo">Невский 142, офис 1-5</a>
+              <a href="#" class="section-contact__link"><img class="subscribe__logo" src="/assets/images/gridicons_location.svg" alt="logo">Загородный 145, офис 11-15</a>
+              </div>
+          </div> 
+      </div>
+</section>
+  <div class = "contacts-image center">
+  <img class="header__logo" src="/assets/images/contact__maps.jpg" alt="logo"></img>
+  </div>
   <footer class="footer center">
       <div class="footer__content">
               <div class="footer__info">
@@ -79,37 +91,22 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
                   </div>
               </div>
               </div> 
-              <nav class="footer__nav footerbar">
-              <a href="#" class="footerbar__link">(c) 2020 OJJO jewelry</a>
-              <a href="#" class="footerbar__link">Договор публичной офферты</a>
-              <a href="#" class="footerbar__link">Контрагентам</a>
-              <a href="#" class="footerbar__link">Сделано Figma.info</a>
-              </nav>
           </div>
   </footer>
-</body>
-  `;
+  <nav class="footer__nav footerbar">
+  <div class="footerbar__content">
+  <a href="#" class="footerbar__link">(c) 2020 OJJO jewelry</a>
+  <a href="#" class="footerbar__link">Договор публичной офферты</a>
+  <a href="#" class="footerbar__link">Контрагентам</a>
+  <a href="#" class="footerbar__link">Сделано Figma.info</a>
+  </div>
+  </nav>
+</body>`;
 
-    appEl.innerHTML = appHtml;
-    renderHeaderComponent({
-      element: document.querySelector(".header"),
-    });
-  };
-  render();
-  renderUploadImageComponent({
-    element: appEl.querySelector(".upload-image-container"),
-    onImageUrlChange(newImageUrl) {
-      imageUrl = newImageUrl;
-    },
-  });
-  document.getElementById("add-button").addEventListener("click", (event) => {
-    const text = document
-      .getElementById("text-input")
-      .value.replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;");
-    onAddPostClick({
-      description: text,
-      imageUrl: imageUrl,
-    });
+  appEl.innerHTML = appHtml;
+
+  //Переход на главную
+  document.querySelector(".listbar__link").addEventListener("click", () => {
+    goToPage(MAIN_PAGE);
   });
 }

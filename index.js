@@ -1,7 +1,6 @@
-import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import {
   MAIN_PAGE,
-  ADD_POSTS_PAGE,
+  CONTACT_PAGE,
   AUTH_PAGE,
   LOADING_PAGE,
   PRODUCTS_PAGE,
@@ -10,32 +9,46 @@ import {
 import { renderProductsPageComponent } from "./components/products-page-component.js";
 import { renderLoadingPageComponent } from "./components/loading-page-component.js";
 import { getUserFromLocalStorage } from "./helpers.js";
-import { renderUserPostsPageComponent } from "./components/user-posts-page-component.js";
+import { renderUserProductsPageComponent } from "./components/user-products-page-component.js";
 import { renderHeaderComponent } from "./components/header-component.js";
+import { renderContactComponent } from "./components/contact-component.js";
 
 export let user = getUserFromLocalStorage();
 export let page = null;
-export let posts = [];
 
-export const goToPage = (newPage) => {
+export const goToPage = async (newPage) => {
   if (
-    [
+    ![
       MAIN_PAGE,
       PRODUCTS_PAGE,
       AUTH_PAGE,
-      ADD_POSTS_PAGE,
+      CONTACT_PAGE,
       USER_PRODUCTS_PAGE,
       LOADING_PAGE,
     ].includes(newPage)
   ) {
-    if (newPage === MAIN_PAGE) {
+    throw new Error("Страница не существует");
+  }
+
+  if (newPage === PRODUCTS_PAGE) {
+    try {
+      renderLoadingPageComponent({
+        appEl: document.getElementById("app"),
+        goToPage,
+      });
+      // const newProducts = await fetchNewProducts();
+      // products = newProducts;
+      page = PRODUCTS_PAGE;
+      renderApp();
+    } catch (error) {
+      console.error(error);
+      goToPage(PRODUCTS_PAGE);
     }
+  } else {
     page = newPage;
     renderApp();
     return;
   }
-
-  throw new Error("страницы не существует");
 };
 
 const renderApp = () => {
@@ -43,30 +56,11 @@ const renderApp = () => {
   if (page === LOADING_PAGE) {
     return renderLoadingPageComponent({
       appEl,
-      user,
+      // user: currentUser,
       goToPage,
     });
   }
 
-  if (page === ADD_POSTS_PAGE) {
-    return renderAddPostPageComponent({
-      appEl,
-      onAddPostClick({ description, imageUrl }) {
-        addPosts({
-          description: description,
-          imageUrl: imageUrl,
-        })
-          .then(() => {
-            goToPage(PRODUCTS_PAGE);
-          })
-          .catch(() => {
-            document
-              .querySelector(".form-error")
-              .classList.remove("--not-entered");
-          });
-      },
-    });
-  }
   if (page === MAIN_PAGE) {
     return renderHeaderComponent({
       appEl,
@@ -79,10 +73,17 @@ const renderApp = () => {
   }
 
   if (page === USER_PRODUCTS_PAGE) {
-    return renderUserPostsPageComponent({
+    return renderUserProductsPageComponent({
       appEl,
     });
   }
+
+  if (page === CONTACT_PAGE) {
+    return renderContactComponent({
+      appEl,
+    });
+  }
+  throw new Error("Не удалось определить страницу для отображения");
 };
 
 goToPage(MAIN_PAGE);
