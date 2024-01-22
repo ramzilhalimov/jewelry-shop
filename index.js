@@ -1,84 +1,54 @@
-import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import {
-  ADD_POSTS_PAGE,
+  MAIN_PAGE,
+  CONTACT_PAGE,
   AUTH_PAGE,
   LOADING_PAGE,
-  POSTS_PAGE,
-  USER_POSTS_PAGE,
+  PRODUCTS_PAGE,
+  USER_PRODUCTS_PAGE,
 } from "./routes.js";
-import { renderPostsPageComponent } from "./components/posts-page-component.js";
+import { renderProductsPageComponent } from "./components/products-page-component.js";
 import { renderLoadingPageComponent } from "./components/loading-page-component.js";
-import {
-  getUserFromLocalStorage,
-  removeUserFromLocalStorage,
-  saveUserToLocalStorage,
-} from "./helpers.js";
-import { renderUserPostsPageComponent } from "./components/user-posts-page-component.js";
+import { getUserFromLocalStorage } from "./helpers.js";
+import { renderUserProductsPageComponent } from "./components/user-products-page-component.js";
+import { renderHeaderComponent } from "./components/header-component.js";
+import { renderContactComponent } from "./components/contact-component.js";
 
 export let user = getUserFromLocalStorage();
 export let page = null;
-export let posts = [];
 
-export const changeLocalPosts = (newPosts) => {
-  posts = newPosts;
-};
-
-export const getToken = () => {
-  const token = user ? `Bearer ${user.token}` : undefined;
-  return token;
-};
-
-export const logout = () => {
-  user = null;
-  removeUserFromLocalStorage();
-  goToPage(POSTS_PAGE);
-};
-
-export const formateDate = (date) => {
-  return formatDistanceToNow(new Date(date), { addSuffix: true, locale: ru });
-};
-
-export const goToPage = (newPage, data) => {
+export const goToPage = async (newPage) => {
   if (
-    [
-      POSTS_PAGE,
+    ![
+      MAIN_PAGE,
+      PRODUCTS_PAGE,
       AUTH_PAGE,
-      ADD_POSTS_PAGE,
-      USER_POSTS_PAGE,
+      CONTACT_PAGE,
+      USER_PRODUCTS_PAGE,
       LOADING_PAGE,
     ].includes(newPage)
   ) {
-    if (newPage === ADD_POSTS_PAGE) {
-      // Если пользователь не авторизован, то отправляем его на авторизацию перед добавлением поста
-      page = user ? ADD_POSTS_PAGE : AUTH_PAGE;
-      return renderApp();
-    }
-
-    if (newPage === POSTS_PAGE) {
-      page = LOADING_PAGE;
-      renderApp();
-    }
-
-    if (newPage === USER_POSTS_PAGE) {
-      page = LOADING_PAGE;
-      renderApp();
-      return getUserPosts({
-        userId: data.userId,
-        token: getToken(),
-      }).then((newPosts) => {
-        page = USER_POSTS_PAGE;
-        posts = newPosts;
-        return renderApp();
-      });
-    }
-
-    page = newPage;
-    renderApp();
-
-    return;
+    throw new Error("Страница не существует");
   }
 
-  throw new Error("страницы не существует");
+  if (newPage === PRODUCTS_PAGE) {
+    try {
+      renderLoadingPageComponent({
+        appEl: document.getElementById("app"),
+        goToPage,
+      });
+      // const newProducts = await fetchNewProducts();
+      // products = newProducts;
+      page = PRODUCTS_PAGE;
+      renderApp();
+    } catch (error) {
+      console.error(error);
+      goToPage(PRODUCTS_PAGE);
+    }
+  } else {
+    page = newPage;
+    renderApp();
+    return;
+  }
 };
 
 const renderApp = () => {
@@ -86,56 +56,34 @@ const renderApp = () => {
   if (page === LOADING_PAGE) {
     return renderLoadingPageComponent({
       appEl,
-      user,
+      // user: currentUser,
       goToPage,
     });
   }
 
-  if (page === AUTH_PAGE) {
-    return renderAuthPageComponent({
+  if (page === MAIN_PAGE) {
+    return renderHeaderComponent({
       appEl,
-      setUser: (newUser) => {
-        user = newUser;
-        saveUserToLocalStorage(user);
-        goToPage(POSTS_PAGE);
-      },
-      user,
-      goToPage,
     });
   }
-
-  if (page === ADD_POSTS_PAGE) {
-    return renderAddPostPageComponent({
-      appEl,
-      onAddPostClick({ description, imageUrl }) {
-        addPosts({
-          description: description,
-          imageUrl: imageUrl,
-          token: getToken(),
-        })
-          .then(() => {
-            goToPage(POSTS_PAGE);
-          })
-          .catch(() => {
-            document
-              .querySelector(".form-error")
-              .classList.remove("--not-entered");
-          });
-      },
-    });
-  }
-
-  if (page === POSTS_PAGE) {
-    return renderPostsPageComponent({
+  if (page === PRODUCTS_PAGE) {
+    return renderProductsPageComponent({
       appEl,
     });
   }
 
-  if (page === USER_POSTS_PAGE) {
-    return renderUserPostsPageComponent({
+  if (page === USER_PRODUCTS_PAGE) {
+    return renderUserProductsPageComponent({
       appEl,
     });
   }
+
+  if (page === CONTACT_PAGE) {
+    return renderContactComponent({
+      appEl,
+    });
+  }
+  throw new Error("Не удалось определить страницу для отображения");
 };
 
-goToPage(POSTS_PAGE);
+goToPage(MAIN_PAGE);

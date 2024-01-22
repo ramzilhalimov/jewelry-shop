@@ -1,5 +1,8 @@
-export function renderHeaderComponent({ element }) {
-  element.innerHTML = `
+import { goToPage } from "..";
+import { CONTACT_PAGE, PRODUCTS_PAGE } from "../routes";
+
+export function renderHeaderComponent({ appEl }) {
+  const appHtml = `
   <body>
   <header class="header center">
       <div class="header__content">
@@ -17,15 +20,50 @@ export function renderHeaderComponent({ element }) {
 <img class="header__logo" src="/assets/images/topcoat_like.svg" alt="logo"></img>
       </nav>
       </div>
+      <div class ="header__title_contect">
       <h1 class="header__heading">Долго, дорого, богато!</h1>
-      <button class="header__button">Перейти в каталог</button>
+      <button id="catalogButton" class="header__button">Перейти в каталог</button>
       <img class="header__brands" src="/assets/images/first-screen__brands.png" alt="brands"></img>
+      </div>
   </header>
-  <div class="for center"
-      <div class="for__title">К мероприятиям</div>
-      <h2 class="for__heading">Настоящая красота здесь!</h2>
-      <img class="for__brands" src="/assets/images/second-screen__list.png"></img> 
-      <div class="for__content center">
+  <div class="for center">
+  <div class="for__content">
+  <p class ="for__text">К мероприятиям</p>
+   <h2 class="for__heading">Настоящая красота здесь!</h2>
+      <div class="for__button-content">
+      <button class="for__button">
+      <div class="for-border">
+      СВАДЬБА
+      </div>
+    </button>
+    <button class="for__button">
+    <div class="for-border">
+    МУЖУ
+    </div>
+  </button>
+  <button class="for__button">
+  <div class="for-border">
+  ЖЕНЕ
+  </div>
+</button>
+<button class="for__button">
+<div class="for-border">
+ПАРТНЕРУ
+</div>
+</button>
+<button class="for__button">
+<div class="for-border">
+КОЛЛЕКЦИИ
+</div>
+</button>
+<button class="for__button">
+<div class="for-border">
+РЕДКОСТЬ
+</div>
+</button>
+</div>
+      </div>
+      <div class="for__list center">
           <div class="for__item for_item_1"></div>
           <div class="for__item for_item_2"></div>
           <div class="for__item for_item_3"></div>
@@ -34,8 +72,7 @@ export function renderHeaderComponent({ element }) {
           <div class="for__item for_item_6"></div>
           </div>
       </div>
-  </div>
-  <div class= "section center"
+  <div class= "section center">
   <div class="section__content ">
   <div class="section__title">Не знаете, что выбрать?</div>
   <h2 class="section__heading">Посетите наши салоны в Москве</h2>
@@ -44,15 +81,17 @@ export function renderHeaderComponent({ element }) {
  </div>
 </div>
 <section class="product-box center">
+<div class ="product-box__content">
 <div class="product-box__title">Полезные статьи</div>
 <h2 class="product-box__heading">Лучшие советы по подбору дорогих подарков</h2>
-<div class="product-box__content" >
+</div>
+<div class="product-box__list" >
   <div class="product-box__item product-box_item_1"></div>
   <div class="product-box__item product-box_item_2"></div>
   <div class="product-box__item product-box_item_3"></div>
 </div>
-<button class="product-box__button">Читать наш блог</button>
-  </div>
+<div class ="product-box__button-content">
+<button class="product-box__button ">Читать наш блог</button>
 </div>
 </section>
 <section class="social-box center">
@@ -83,7 +122,7 @@ export function renderHeaderComponent({ element }) {
         <form action="#" class="subscribe__form subscribebar">
         <div class="subscribebar__item">
         <input placeholder=" Ваш Email  " class="subscribebar__email" type="email" >
-        <button class="subscribebar__btn">Подписаться</button>
+        <button class="subscribebar__btn">Отправить</button>
     </div>
     </form>
     </div>
@@ -124,17 +163,26 @@ export function renderHeaderComponent({ element }) {
                   </div>
               </div>
               </div> 
-              <nav class="footer__nav footerbar">
-              <a href="#" class="footerbar__link">(c) 2020 OJJO jewelry</a>
-              <a href="#" class="footerbar__link">Договор публичной офферты</a>
-              <a href="#" class="footerbar__link">Контрагентам</a>
-              <a href="#" class="footerbar__link">Сделано Figma.info</a>
-              </nav>
           </div>
   </footer>
+  <nav class="footer__nav footerbar">
+  <div class="footerbar__content">
+  <a href="#" class="footerbar__link">(c) 2020 OJJO jewelry</a>
+  <a href="#" class="footerbar__link">Договор публичной офферты</a>
+  <a href="#" class="footerbar__link">Контрагентам</a>
+  <a href="#" class="footerbar__link">Сделано Figma.info</a>
+  </div>
+  </nav>
 </body>
   
 `;
-
-  return element;
+  appEl.innerHTML = appHtml;
+  //Переход на страницу  товаров
+  document.querySelector(".header__button").addEventListener("click", () => {
+    goToPage(PRODUCTS_PAGE);
+  });
+  //Переход на страницу контактов
+  document.querySelector(".section__button").addEventListener("click", () => {
+    goToPage(CONTACT_PAGE);
+  });
 }

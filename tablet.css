@@ -1,0 +1,41 @@
+@media (min-width: 768px) and (max-width: 1023px) {
+  .center {
+    padding-left: 15%;
+    padding-right: 15%;
+  }
+
+  .header {
+    height: 600px;
+  }
+
+  .header__input {
+    width: 200px;
+    height: 31px;
+  }
+
+  .header__heading {
+    margin-top: 150px;
+    margin-left: 100px;
+    max-width: 300px;
+    font-size: 30px;
+    line-height: 38px;
+  }
+
+  .header__button {
+    margin-left: 150px;
+  }
+
+  .for {
+    padding: 40px;
+  }
+
+  .for__item {
+    height: 220px;
+  }
+
+  .for__heading {
+    margin-bottom: 40px;
+    font-size: 28px;
+    line-height: 35px;
+  }
+}
